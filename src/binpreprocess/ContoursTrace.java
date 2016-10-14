@@ -254,4 +254,38 @@ public class ContoursTrace {
         return r;
     }
 
+
+    public static Collection<Contours> traceAllContours_1 (BinaryImage image, boolean print) {
+        BinaryImage borderSet = new BinaryImage(image.width(), image.height());
+
+        Collection<Contours> contourses = new ArrayList<>();
+
+        for (int y = image.height() - 1; y >= 0; y--)
+            for (int x = 1; x < image.width(); x++)
+                if (image.pixel(x, y) != image.pixel(x - 1, y) &&
+                        borderSet.pixel(x, y) == 0 &&
+                        borderSet.pixel(x-1,y) == 0) {
+                    // Not a found border, and the color change
+
+                    // Trace a new contour
+                    Contours newContours = traceContours(image, x, y, Direction.UP);
+
+                    if (print) {
+                        System.out.println (newContours.toString());
+                    }
+
+                    // Add all pixels in the new contour to the set
+                    Iterator<Coordinate> it = newContours.coordinates.iterator();
+
+                    while (it.hasNext()) {
+                        Coordinate cord = it.next();
+                        borderSet.setPixel(cord.x, cord.y, 1);
+                    }
+
+                    contourses.add(newContours);
+                }
+
+        return contourses;
+    }
+
 }

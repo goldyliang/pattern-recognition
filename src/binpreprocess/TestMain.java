@@ -42,6 +42,14 @@ public class TestMain {
 		contourses.highlightInImage(image_buf, 0xffff0000);
 	}
 
+	public static void traceAndMark2 (BinaryImage image, BufferedImage image_buf, boolean print) {
+		Collection <Contours> contourses = ContoursTrace.traceAllContours_1(image, print);
+
+		for (Contours c : contourses) {
+			c.highlightInImage(image_buf, 0xffff0000);
+		}
+	}
+
 	public static void main2 () throws FileNotFoundException, IOException  {
 		//BinaryImage image = BinaryImage.loadImage("contoustest2.txt");
 		BinaryImage image = BinaryImage.loadImageFromPic("stamp2.gif");
@@ -56,21 +64,22 @@ public class TestMain {
 		ImageIO.write (img, "BMP", new File("stamp2-2.bmp"));
 	}
 
-	public static void main3 (String bwPath, String origPath, int level, boolean recursive, boolean print) throws FileNotFoundException, IOException  {
+	public static void main3 (String bwPath, boolean print) throws IOException  {
 		//BinaryImage image = BinaryImage.loadImage("contoustest2.txt");
 		BinaryImage image = BinaryImage.loadImageFromPic(bwPath);
 
-		//Smoothing.smoothImage(image);
+		Smoothing.smoothImage(image);
 
 		String [] paths = bwPath.split("\\.");
 		String outFile = paths[0] + "-smoothed.bmp";
 		image.saveToBmp(outFile);
 
-		//BufferedImage img = ImageIO.read(new File(origPath));
-		BufferedImage img = ImageIO.read(new File(outFile));
+		BufferedImage img = new BufferedImage (image.width(), image.height(), BufferedImage.TYPE_INT_RGB);
+		for (int x=0; x<img.getWidth(); x++)
+			for (int y=0; y<img.getHeight(); y++)
+				img.setRGB(x,y,0xffffffff);
 
-		traceAndMark(image, 0, 0, image.width()-1, image.height()-1, 1, level, img, recursive, print);
-		//traceAndMark(image, 142,808, 400,926, 0, img);
+		traceAndMark2(image, img, print);
 
 		outFile = paths[0] + "-contours.bmp";
 		ImageIO.write (img, "BMP", new File(outFile));
@@ -78,11 +87,10 @@ public class TestMain {
 
 	public static void main (String[] args) throws FileNotFoundException, IOException {
 		
-		//main3 ("coin-bw.bmp");
-//		main3 ("stamp2.bmp", "stamp2.bmp", 3, true, false);
+		main3 ("stamp2.bmp", false);
 
-		//main3 ("coin-bw.bmp", "coin-bw.bmp", 2, true, false);
+		//main3 ("coin-bw.bmp", false);
 
-		main1("test1.txt");
+		//main1("test1.txt");
 	}
 }
