@@ -289,4 +289,13 @@ public class ContoursTrace {
         return contourses;
     }
 
+    public static BinaryImage contoursHighlightImg (BinaryImage img, Collection<Contours> contours) {
+        BinaryImage image_out = new BinaryImage(img.width(), img.height());
+
+        for (Contours con : contours) {
+            con.markInBinImage(image_out, 1);
+        }
+        return image_out;
+    }
+
 }

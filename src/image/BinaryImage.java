@@ -10,6 +10,10 @@ import javax.imageio.*;
 
 
 public class BinaryImage {
+
+	public static int RGB_WHITE = 0xffffffff;
+	public static int RGB_BLACK= 0xff000000;
+
 	public int [][] pixels;
 
 	public static class Coordinate {
@@ -47,7 +51,7 @@ public class BinaryImage {
 	public int height() {
 		return pixels[0].length;
 	}
-	
+
 	public int width() {
 		return pixels.length;
 	}
@@ -76,33 +80,33 @@ public class BinaryImage {
 	}
 
 	public boolean validCord (int x, int y) {
-		 return x >=0 && x < width() && y >=0 && y < height();
+		return x >=0 && x < width() && y >=0 && y < height();
 	}
-	
+
 	public static BinaryImage loadImage (String path) throws FileNotFoundException, IOException {
-		
-	    BinaryImage image;
+
+		BinaryImage image;
 
 		try(BufferedReader br = new BufferedReader(new FileReader(path))) {
-		    String line = br.readLine();
-		    
-		    int w = Integer.valueOf(line.split(",")[0]);
-		    int h = Integer.valueOf(line.split(",")[1]);
+			String line = br.readLine();
+
+			int w = Integer.valueOf(line.split(",")[0]);
+			int h = Integer.valueOf(line.split(",")[1]);
 
 			image = new BinaryImage(w,h);
 
-		    int y = 0;
-		    while ( (line = br.readLine()) != null) {
-		        for ( int x = 0; x < line.length() && x < w; x++ ) {
-		        	if (line.charAt(x) == ' ' || line.charAt(x) == '0')
-		        		image.pixels [x][y] = 0;
+			int y = 0;
+			while ( (line = br.readLine()) != null) {
+				for ( int x = 0; x < line.length() && x < w; x++ ) {
+					if (line.charAt(x) == ' ' || line.charAt(x) == '0')
+						image.pixels [x][y] = 0;
 					else
 						image.pixels [x][y] = 1;
-		        }
-		        y++;
-		    }
+				}
+				y++;
+			}
 		}
-		
+
 		return image;
 	}
 
@@ -119,7 +123,7 @@ public class BinaryImage {
 			for (int y = 0 ; y < h; y++)
 			{
 				int rgb = img.getRGB(x, y) & 0x00ffffff;
-				image.setPixel (x,y, rgb == 0 ? 0:1);
+				image.setPixel (x,y, rgb == 0 ? 1:0);
 			}
 
 		return image;
@@ -131,14 +135,14 @@ public class BinaryImage {
 		for (int x = 0; x < width(); x++)
 			for (int y = 0; y < height(); y++) {
 				if (pixels[x][y] > 0)
-					img.setRGB(x, y, 0xffffffff);
+					img.setRGB(x, y, RGB_BLACK);
 				else
-					img.setRGB(x, y, 0xff000000);
+					img.setRGB(x, y, RGB_WHITE);
 			}
 
 		ImageIO.write (img, "BMP", new File(path));
 	}
-	
+
 	public void display () {
 		for (int i = 0; i < width() + 2; i++)
 			System.out.print ('-');
@@ -166,7 +170,7 @@ public class BinaryImage {
 				else if (imgb.pixels[x][y] > 0 )
 					img_r.setRGB(x, y, rgbb);
 				else
-					img_r.setRGB(x, y, 0xffffffff);
+					img_r.setRGB(x, y, RGB_WHITE);
 
 		return img_r;
 	}
@@ -180,4 +184,46 @@ public class BinaryImage {
 					img.setRGB(x, y, 0xffffffff);
 				else
 					img.setRGB(x, y, 0xff000000);	} */
+
+	public BinaryImage cloneImage() {
+		BinaryImage r = new BinaryImage(width(), height());
+
+		for (int x = 0; x < width(); x++)
+			for (int y=0; y<height(); y++)
+				r.setPixel(x,y, this.pixel(x,y));
+
+		return r;
+	}
+
+	public static BufferedImage colorDiffImg (BufferedImage img, int algo) {
+		BufferedImage img_out = new BufferedImage( img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+		for (int x = 0; x < img.getWidth(); x++)
+			for (int y= 0; y < img.getHeight(); y++) {
+				int r = (img.getRGB(x, y) & 0x00ff0000) >> 16;
+				int g = (img.getRGB(x, y) & 0x0000ff00) >> 8;
+				int b = img.getRGB(x, y) & 0x000000ff;
+
+				double var;
+
+				if (algo==0) {
+					double avg = (r + g + b) / 3.0;
+					var = Math.sqrt(((r - avg) * (r - avg) + (g - avg) * (g - avg) + (b - avg) * (b - avg)) / 3);
+				} else {
+					var = Math.max( Math.max(r,g), b) - Math.min (Math.min(r,g), b);
+				}
+
+				int gray = (int) (Math.round (var));
+
+				if (gray > 255) gray = 255;
+
+				gray = 255 - gray;
+
+				int rgb = 0xff000000 + (gray << 16) + (gray << 8) + gray;
+
+				img_out.setRGB(x, y, rgb);
+			}
+
+		return img_out;
+	}
 }
