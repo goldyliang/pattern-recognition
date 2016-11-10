@@ -7,6 +7,8 @@ import image.BinaryImage;
  */
 public class Moments {
 
+    static double TIMES_SIZE_NORM  = 5;
+
     private static int iPwr (int v, int n) {
         int r = 1;
 
@@ -37,8 +39,8 @@ public class Moments {
         int xc = round (GeoMoment (img, 1, 0) / weight);
         int yc = round (GeoMoment (img, 0, 1) / weight);
 
-        int H1 = round (4 * Math.sqrt( CentralMoment(img, xc, yc, 0, 2) / weight));
-        int W1 = round (4 * Math.sqrt( CentralMoment(img, xc, yc, 2, 0) / weight));
+        int H1 = round (TIMES_SIZE_NORM * Math.sqrt( CentralMoment(img, xc, yc, 0, 2) / weight));
+        int W1 = round (TIMES_SIZE_NORM * Math.sqrt( CentralMoment(img, xc, yc, 2, 0) / weight));
 
         double R1 = (H1 < W1 ? (double)H1 / W1 : (double)W1 / H1);
 
