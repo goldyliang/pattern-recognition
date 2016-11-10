@@ -1,4 +1,4 @@
-package binpreprocess;
+package image;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,7 +10,7 @@ import javax.imageio.*;
 
 
 public class BinaryImage {
-	protected int [][] pixels;
+	public int [][] pixels;
 
 	public static class Coordinate {
 		public int x;
@@ -154,6 +154,21 @@ public class BinaryImage {
 		for (int i = 0; i < width() + 2; i++)
 			System.out.print ('-');
 		System.out.println();
+	}
+
+	public static BufferedImage getMixedImage (BinaryImage imgf, int rgbf, BinaryImage imgb, int rgbb) {
+		BufferedImage img_r = new BufferedImage(imgf.width(), imgf.height(), BufferedImage.TYPE_INT_RGB);
+
+		for (int x = 0; x < imgf.width(); x++)
+			for (int y=0; y < imgf.height(); y++)
+				if (imgf.pixels[x][y] > 0)
+					img_r.setRGB(x, y, rgbf);
+				else if (imgb.pixels[x][y] > 0 )
+					img_r.setRGB(x, y, rgbb);
+				else
+					img_r.setRGB(x, y, 0xffffffff);
+
+		return img_r;
 	}
 
 /*	public BufferedImage getRenderableImage() {

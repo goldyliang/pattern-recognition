@@ -1,5 +1,7 @@
-package binpreprocess;
+package preprocess;
 
+
+import image.BinaryImage;
 
 public class Smoothing {
  

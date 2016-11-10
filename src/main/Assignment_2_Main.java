@@ -1,4 +1,4 @@
-package binpreprocess;
+package main;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -6,10 +6,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
-import binpreprocess.ContoursTrace.Contours;
-import binpreprocess.BinaryImage.Coordinate;
 
-public class TestMain {
+import feature.ContoursTrace;
+import feature.ContoursTrace.Contours;
+import image.BinaryImage;
+import image.BinaryImage.Coordinate;
+import preprocess.ImgStatistic;
+import preprocess.Moments;
+import preprocess.Smoothing;
+
+public class Assignment_2_Main {
 
 	public static void main1 (String path) throws FileNotFoundException, IOException  {
 		BinaryImage image = //BinaryImage.loadImageFromPic("stamp2.gif");
@@ -87,9 +93,9 @@ public class TestMain {
 
 	public static void main (String[] args) throws FileNotFoundException, IOException {
 		
-		main3 ("stamp2.bmp", false);
+		//main3 ("stamp2.bmp", false);
 
-		//main3 ("coin-bw.bmp", false);
+		main3 ("coin-bw.bmp", false);
 
 		//main1("test1.txt");
 	}

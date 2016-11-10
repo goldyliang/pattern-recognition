@@ -1,9 +1,10 @@
-package binpreprocess;
+package feature;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
 
-import binpreprocess.BinaryImage.Coordinate;
+import image.BinaryImage;
+import image.BinaryImage.Coordinate;
 
 /**
  * Created by gordon on 10/12/16.

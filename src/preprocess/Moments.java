@@ -1,4 +1,6 @@
-package binpreprocess;
+package preprocess;
+
+import image.BinaryImage;
 
 /**
  * Created by gordon on 10/9/16.
@@ -29,7 +31,7 @@ public class Moments {
         return m;
     }
 
-    static BinaryImage normalized (BinaryImage img, int L, ImgStatistic ch) {
+    public static BinaryImage normalized (BinaryImage img, int L, ImgStatistic ch) {
 
         double weight = GeoMoment(img, 0 , 0);
         int xc = round (GeoMoment (img, 1, 0) / weight);

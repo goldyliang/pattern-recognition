@@ -1,5 +1,6 @@
-package binpreprocess;
+package preprocess;
 
+import image.BinaryImage;
 import org.junit.Test;
 
 public class SmoothingTest {

@@ -1,15 +1,12 @@
-package binpreprocess;
+package feature;
 
+import image.BinaryImage;
 import org.junit.Test;
-import binpreprocess.ContoursTrace.Contours;
-import binpreprocess.ContoursTrace.Direction;
-import binpreprocess.BinaryImage.Coordinate;
+import feature.ContoursTrace.Contours;
+import feature.ContoursTrace.Direction;
+import image.BinaryImage.Coordinate;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 public class ContoursTraceTest {
 
