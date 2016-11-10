@@ -2,6 +2,7 @@ package main;
 
 import feature.ContoursTrace;
 import image.BinaryImage;
+import preprocess.Binarizing;
 import preprocess.Smoothing;
 import feature.Skeleton;
 
@@ -54,9 +55,9 @@ public class Assignment_3_Main {
 
         // Generate a color-diff image from the image of fruit
         BufferedImage img = ImageIO.read (new File("images/fruits.bmp"));
-        BufferedImage img_out = BinaryImage.colorDiffImg(img, 0);
+        BufferedImage img_out = Binarizing.colorDiffImg(img, 0);
         ImageIO.write (img_out, "BMP", new File("images/fruits-colordiff-stderr.bmp"));
-        img_out = BinaryImage.colorDiffImg(img, 1);
+        img_out = Binarizing.colorDiffImg(img, 1);
         ImageIO.write (img_out, "BMP", new File("images/fruits-colordiff-minmax.bmp"));
 
         // Do and mark skeleton for the binary image of fruits got from the colordiff image
